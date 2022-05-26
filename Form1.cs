@@ -6,5 +6,16 @@ namespace TDX_Extended
         {
             InitializeComponent();
         }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings_Form settings = new Settings_Form();
+            settings.Show();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
