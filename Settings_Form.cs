@@ -21,5 +21,11 @@ namespace TDX_Extended
         {
             this.Close();
         }
+
+        private void addressBookBtn_Click(object sender, EventArgs e)
+        {
+            AddressBook book = new AddressBook();
+            book.Show();
+        }
     }
 }
