@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 
 
-namespace TDX_WebAPI_Test
+namespace TDX_Extended
 {
     internal class TDX_Groups
     {

@@ -1,4 +1,4 @@
-﻿namespace TDX_WebAPI_Test
+﻿namespace TDX_Extended
 {
     internal class TDX_People_GetUserListQuery
     {

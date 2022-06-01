@@ -12,6 +12,8 @@ namespace TDX_Extended
 {
     public partial class Settings_Form : Form
     {
+
+        private AddressBook.Selection addressBookSelection = AddressBook.Selection.sandboxServer;
         public Settings_Form()
         {
             InitializeComponent();
@@ -24,7 +26,8 @@ namespace TDX_Extended
 
         private void addressBookBtn_Click(object sender, EventArgs e)
         {
-            AddressBook book = new AddressBook();
+            
+            AddressBook book = new AddressBook(addressBookSelection);
             book.Show();
         }
     }

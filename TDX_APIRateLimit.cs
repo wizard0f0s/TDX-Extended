@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TDX_WebAPI_Test
+namespace TDX_Extended
 {
     internal class TDX_APIRateLimit
     {

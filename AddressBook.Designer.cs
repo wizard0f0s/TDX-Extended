@@ -31,12 +31,12 @@
             this.saveBtn = new System.Windows.Forms.Button();
             this.cancelBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.prodAdminServerTxtBox = new System.Windows.Forms.TextBox();
+            this.prodServerTxtBox = new System.Windows.Forms.TextBox();
             this.prodAdminBtn = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.prodAdminBeidTxtBox = new System.Windows.Forms.TextBox();
+            this.prodBeidTxtBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.prodAdminWSKTxtBox = new System.Windows.Forms.TextBox();
+            this.prodKeyTxtBox = new System.Windows.Forms.TextBox();
             this.prodUserPwdTxtBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.prodUserUsernameTxtBox = new System.Windows.Forms.TextBox();
@@ -51,12 +51,12 @@
             this.sandboxUserBtn = new System.Windows.Forms.RadioButton();
             this.sandboxUserServerTxtBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.sandboxAdminWskTxtBox = new System.Windows.Forms.TextBox();
+            this.sandboxKeyTxtBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.sandboxAdminBeidTxtBox = new System.Windows.Forms.TextBox();
+            this.sandboxBeidTxtBox = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.sandboxAdminBtn = new System.Windows.Forms.RadioButton();
-            this.sandboxAdminServerTxtBox = new System.Windows.Forms.TextBox();
+            this.sandboxServerTxtBox = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -68,6 +68,7 @@
             this.saveBtn.TabIndex = 0;
             this.saveBtn.Text = "Save";
             this.saveBtn.UseVisualStyleBackColor = true;
+            this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
             // 
             // cancelBtn
             // 
@@ -88,12 +89,12 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Server: (form https://url.tdx.com/TDWebApi)";
             // 
-            // prodAdminServerTxtBox
+            // prodServerTxtBox
             // 
-            this.prodAdminServerTxtBox.Location = new System.Drawing.Point(32, 111);
-            this.prodAdminServerTxtBox.Name = "prodAdminServerTxtBox";
-            this.prodAdminServerTxtBox.Size = new System.Drawing.Size(305, 23);
-            this.prodAdminServerTxtBox.TabIndex = 4;
+            this.prodServerTxtBox.Location = new System.Drawing.Point(32, 111);
+            this.prodServerTxtBox.Name = "prodServerTxtBox";
+            this.prodServerTxtBox.Size = new System.Drawing.Size(305, 23);
+            this.prodServerTxtBox.TabIndex = 4;
             // 
             // prodAdminBtn
             // 
@@ -117,12 +118,12 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "BEID:";
             // 
-            // prodAdminBeidTxtBox
+            // prodBeidTxtBox
             // 
-            this.prodAdminBeidTxtBox.Location = new System.Drawing.Point(32, 155);
-            this.prodAdminBeidTxtBox.Name = "prodAdminBeidTxtBox";
-            this.prodAdminBeidTxtBox.Size = new System.Drawing.Size(305, 23);
-            this.prodAdminBeidTxtBox.TabIndex = 7;
+            this.prodBeidTxtBox.Location = new System.Drawing.Point(32, 155);
+            this.prodBeidTxtBox.Name = "prodBeidTxtBox";
+            this.prodBeidTxtBox.Size = new System.Drawing.Size(305, 23);
+            this.prodBeidTxtBox.TabIndex = 7;
             // 
             // label3
             // 
@@ -133,12 +134,12 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "Web Services Key:";
             // 
-            // prodAdminWSKTxtBox
+            // prodKeyTxtBox
             // 
-            this.prodAdminWSKTxtBox.Location = new System.Drawing.Point(33, 199);
-            this.prodAdminWSKTxtBox.Name = "prodAdminWSKTxtBox";
-            this.prodAdminWSKTxtBox.Size = new System.Drawing.Size(304, 23);
-            this.prodAdminWSKTxtBox.TabIndex = 9;
+            this.prodKeyTxtBox.Location = new System.Drawing.Point(33, 199);
+            this.prodKeyTxtBox.Name = "prodKeyTxtBox";
+            this.prodKeyTxtBox.Size = new System.Drawing.Size(304, 23);
+            this.prodKeyTxtBox.TabIndex = 9;
             // 
             // prodUserPwdTxtBox
             // 
@@ -264,12 +265,12 @@
             this.label9.TabIndex = 24;
             this.label9.Text = "Server: (form https://url.tdx.com/SBTDWebApi)";
             // 
-            // sandboxAdminWskTxtBox
+            // sandboxKeyTxtBox
             // 
-            this.sandboxAdminWskTxtBox.Location = new System.Drawing.Point(408, 199);
-            this.sandboxAdminWskTxtBox.Name = "sandboxAdminWskTxtBox";
-            this.sandboxAdminWskTxtBox.Size = new System.Drawing.Size(305, 23);
-            this.sandboxAdminWskTxtBox.TabIndex = 23;
+            this.sandboxKeyTxtBox.Location = new System.Drawing.Point(408, 199);
+            this.sandboxKeyTxtBox.Name = "sandboxKeyTxtBox";
+            this.sandboxKeyTxtBox.Size = new System.Drawing.Size(305, 23);
+            this.sandboxKeyTxtBox.TabIndex = 23;
             // 
             // label10
             // 
@@ -280,12 +281,12 @@
             this.label10.TabIndex = 22;
             this.label10.Text = "Web Services Key:";
             // 
-            // sandboxAdminBeidTxtBox
+            // sandboxBeidTxtBox
             // 
-            this.sandboxAdminBeidTxtBox.Location = new System.Drawing.Point(407, 155);
-            this.sandboxAdminBeidTxtBox.Name = "sandboxAdminBeidTxtBox";
-            this.sandboxAdminBeidTxtBox.Size = new System.Drawing.Size(306, 23);
-            this.sandboxAdminBeidTxtBox.TabIndex = 21;
+            this.sandboxBeidTxtBox.Location = new System.Drawing.Point(407, 155);
+            this.sandboxBeidTxtBox.Name = "sandboxBeidTxtBox";
+            this.sandboxBeidTxtBox.Size = new System.Drawing.Size(306, 23);
+            this.sandboxBeidTxtBox.TabIndex = 21;
             // 
             // label11
             // 
@@ -309,12 +310,12 @@
             this.sandboxAdminBtn.UseVisualStyleBackColor = true;
             this.sandboxAdminBtn.CheckedChanged += new System.EventHandler(this.sandboxAdminBtn_CheckedChanged);
             // 
-            // sandboxAdminServerTxtBox
+            // sandboxServerTxtBox
             // 
-            this.sandboxAdminServerTxtBox.Location = new System.Drawing.Point(407, 111);
-            this.sandboxAdminServerTxtBox.Name = "sandboxAdminServerTxtBox";
-            this.sandboxAdminServerTxtBox.Size = new System.Drawing.Size(306, 23);
-            this.sandboxAdminServerTxtBox.TabIndex = 18;
+            this.sandboxServerTxtBox.Location = new System.Drawing.Point(407, 111);
+            this.sandboxServerTxtBox.Name = "sandboxServerTxtBox";
+            this.sandboxServerTxtBox.Size = new System.Drawing.Size(306, 23);
+            this.sandboxServerTxtBox.TabIndex = 18;
             // 
             // label12
             // 
@@ -337,12 +338,12 @@
             this.Controls.Add(this.sandboxUserBtn);
             this.Controls.Add(this.sandboxUserServerTxtBox);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.sandboxAdminWskTxtBox);
+            this.Controls.Add(this.sandboxKeyTxtBox);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.sandboxAdminBeidTxtBox);
+            this.Controls.Add(this.sandboxBeidTxtBox);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.sandboxAdminBtn);
-            this.Controls.Add(this.sandboxAdminServerTxtBox);
+            this.Controls.Add(this.sandboxServerTxtBox);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.prodUserPwdTxtBox);
             this.Controls.Add(this.label4);
@@ -351,12 +352,12 @@
             this.Controls.Add(this.prodUserBtn);
             this.Controls.Add(this.prodUserServerTxtBox);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.prodAdminWSKTxtBox);
+            this.Controls.Add(this.prodKeyTxtBox);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.prodAdminBeidTxtBox);
+            this.Controls.Add(this.prodBeidTxtBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.prodAdminBtn);
-            this.Controls.Add(this.prodAdminServerTxtBox);
+            this.Controls.Add(this.prodServerTxtBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.saveBtn);
@@ -372,12 +373,12 @@
         private Button saveBtn;
         private Button cancelBtn;
         private Label label2;
-        private TextBox prodAdminServerTxtBox;
+        private TextBox prodServerTxtBox;
         private RadioButton prodAdminBtn;
         private Label label1;
-        private TextBox prodAdminBeidTxtBox;
+        private TextBox prodBeidTxtBox;
         private Label label3;
-        private TextBox prodAdminWSKTxtBox;
+        private TextBox prodKeyTxtBox;
         private TextBox prodUserPwdTxtBox;
         private Label label4;
         private TextBox prodUserUsernameTxtBox;
@@ -392,12 +393,12 @@
         private RadioButton sandboxUserBtn;
         private TextBox sandboxUserServerTxtBox;
         private Label label9;
-        private TextBox sandboxAdminWskTxtBox;
+        private TextBox sandboxKeyTxtBox;
         private Label label10;
-        private TextBox sandboxAdminBeidTxtBox;
+        private TextBox sandboxBeidTxtBox;
         private Label label11;
         private RadioButton sandboxAdminBtn;
-        private TextBox sandboxAdminServerTxtBox;
+        private TextBox sandboxServerTxtBox;
         private Label label12;
     }
 }

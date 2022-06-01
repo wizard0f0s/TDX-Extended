@@ -9,7 +9,8 @@ using System.Text.Json;
 using System.Web;
 using TeamDynamix.Api;
 
-namespace TDX_WebAPI_Test
+
+namespace TDX_Extended
 {
 
     internal class TDX_Login
@@ -77,7 +78,6 @@ namespace TDX_WebAPI_Test
             _getUserAsyncMaxCalls = 60;
             _getUserAsyncTimePeriod = 60;
             _getUserAsyncRateLimit = new TDX_APIRateLimit(_getUserAsyncMaxCalls, _getUserAsyncTimePeriod);
-            
         }
 
         public TDX_Authentication(string site, string user, string pass)

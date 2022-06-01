@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Web;
 using TeamDynamix.Api;
 
-namespace TDX_WebAPI_Test
+namespace TDX_Extended
 {
     internal class TDX_People
     {
