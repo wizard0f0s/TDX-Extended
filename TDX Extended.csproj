@@ -17,4 +17,19 @@
     <PackageReference Include="TeamDynamix.Api" Version="11.4.10.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="TDXE.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TDXE.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TDXE.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>TDXE.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
 </Project>
