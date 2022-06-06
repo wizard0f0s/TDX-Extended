@@ -1,6 +1,6 @@
 ﻿namespace TDX_Extended
 {
-    partial class AddressBook
+    partial class AddressBook_Form
     {
         /// <summary>
         /// Required designer variable.
