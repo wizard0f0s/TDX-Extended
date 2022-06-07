@@ -43,7 +43,7 @@ namespace TDX_Extended
     }
 
 
-    public class TDX_Authentication
+    internal class TDX_Authentication
     {
         private string _token { get; set; }
         private string _website { get; set; }
@@ -62,6 +62,7 @@ namespace TDX_Extended
         private TDX_APIRateLimit _getUserAsyncRateLimit;
         private int _getUserAsyncMaxCalls;
         private int _getUserAsyncTimePeriod; //seconds
+        private Logger _myLogger;
 
 
         private TDX_Authentication(string site)
@@ -80,15 +81,17 @@ namespace TDX_Extended
             _getUserAsyncRateLimit = new TDX_APIRateLimit(_getUserAsyncMaxCalls, _getUserAsyncTimePeriod);
         }
 
-        public TDX_Authentication(string site, string user, string pass)
+        public TDX_Authentication(Logger logger, string site, string user, string pass)
             : this(site)
         {
+            _myLogger = logger;
             _tdxLogin = new TDX_Login(user, pass);
         }
 
-        public TDX_Authentication(string site, string beid, string webServicesKey, bool isAdmin)
+        public TDX_Authentication(Logger logger, string site, string beid, string webServicesKey, bool isAdmin)
             : this(site)
         {
+            _myLogger = logger;
             _tdx_isAdmin = isAdmin;
             _tdxAdmin = new TDX_Admin(beid, webServicesKey);
         }
@@ -99,7 +102,7 @@ namespace TDX_Extended
 
             while (!success)
             {
-                await _loginAsyncRateLimit.CheckRateLimit();
+                await _loginAsyncRateLimit.CheckRateLimit(_myLogger);
 
                 var data = JsonSerializer.Serialize(_tdxLogin);
                 var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
@@ -110,53 +113,14 @@ namespace TDX_Extended
 
                 if (!result.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("TEST FAILED:\n\n" +
-                        "TDX_Authentication:LoginAsync Error: StatusCode= " + 
-                        result.StatusCode + ", ReasonPhrase= " + result.ReasonPhrase + "." +
+                    _myLogger.Message("TEST FAILED:\n\n" +
+                        "TDX_Authentication:LoginAsync Error: " +
+                        "\n\nStatusCode= " + result.StatusCode + 
+                        ",\n\nReasonPhrase= " + result.ReasonPhrase + "." +
                         "\n\nResponse content = " + _token);
                 } else
                 {
-                    MessageBox.Show("TEST SUCCEEDED:\n\n" +
-                        "TDX_Authentication:\n" +
-                        "Content " + result.Content +
-                        "Result.toString(): " + result.ToString() +
-                        "JWT: " + _token);
-
-                    return _token;
-                }
-            }
-            return "";
-        }
-
-        public async Task<string> LoginTestAsync(HttpClient httpClient)
-        {
-            var success = false;
-
-            while (!success)
-            {
-                await _loginAsyncRateLimit.CheckRateLimit();
-
-                var data = JsonSerializer.Serialize(_tdxLogin);
-                var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                HttpResponseMessage result = await httpClient.PostAsync(httpClient.BaseAddress + "/api/auth/login", content);
-                _token = result.Content.ReadAsStringAsync().Result;
-
-                if (!result.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("TEST FAILED:\n\n" +
-                        "TDX_Authentication:LoginAsync Error: StatusCode= " +
-                        result.StatusCode + ", ReasonPhrase= " + result.ReasonPhrase + "." +
-                        "\n\nResponse content = " + _token);
-                }
-                else
-                {
-                    MessageBox.Show("TEST SUCCEEDED:\n\n" +
-                        "TDX_Authentication:\n" +
-                        "Content " + result.Content +
-                        "Result.toString(): " + result.ToString() +
-                        "JWT: " + _token);
+                    _myLogger.Message("Authentication SUCCEEDED!");
 
                     return _token;
                 }
@@ -167,7 +131,7 @@ namespace TDX_Extended
 
         public async Task<string> LoginAdminAsync(HttpClient httpClient)
         {
-            await _loginAdminAsyncRateLimit.CheckRateLimit();
+            await _loginAdminAsyncRateLimit.CheckRateLimit(_myLogger);
 
             var data = JsonSerializer.Serialize(_tdxAdmin);
             var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
@@ -178,53 +142,17 @@ namespace TDX_Extended
 
             if (!result.IsSuccessStatusCode)
             {
-                MessageBox.Show("TEST FAILED:\n\n" +
-                   "TDX_Authentication:LoginAdminAsync Error: StatusCode= " +
-                   result.StatusCode + 
-                   ", ReasonPhrase= " + 
-                   result.ReasonPhrase + "." +
+                _myLogger.Message("TEST FAILED:\n\n" +
+                   "TDX_Authentication:LoginAdminAsync Error: " +
+                   "\n\nStatusCode= " + result.StatusCode + 
+                   ",\n\n ReasonPhrase= " + result.ReasonPhrase + "." +
                    "\n\nResponse content = " + _token);
 
                 _token = await LoginAdminAsync(httpClient);
             }
             else
             {
-                MessageBox.Show("Authentication SUCCEEDED:\n\n" +
-                    "TDX_Authentication:\n" + 
-                    "Content " + result.Content + 
-                    "Result.toString(): " + result.ToString() + 
-                    "JWT: " + _token);
-            }
-            return _token;
-        }
-
-        public async Task<string> LoginAdminTestAsync(HttpClient httpClient)
-        {
-            await _loginAdminAsyncRateLimit.CheckRateLimit();
-
-            var data = JsonSerializer.Serialize(_tdxAdmin);
-            var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            HttpResponseMessage result = await httpClient.PostAsync(httpClient.BaseAddress + "/api/auth/loginadmin", content);
-            _token = result.Content.ReadAsStringAsync().Result;
-
-            if (!result.IsSuccessStatusCode)
-            {
-                MessageBox.Show("TEST FAILED:\n\n" +
-                   "TDX_Authentication:LoginAdminTestAsync Error: StatusCode= " +
-                   result.StatusCode +
-                   ", ReasonPhrase= " +
-                   result.ReasonPhrase + "." +
-                   "\n\nResponse content = " + _token);
-            }
-            else
-            {
-                MessageBox.Show("Authentication SUCCEEDED:\n\n" +
-                    "TDX_Authentication:\n" +
-                    "Content " + result.Content +
-                    "Result.toString(): " + result.ToString() +
-                    "JWT: " + _token);
+                _myLogger.Message("Authentication SUCCEEDED!");
             }
             return _token;
         }
@@ -232,7 +160,7 @@ namespace TDX_Extended
 
         public async Task getUserAsync(HttpClient httpClient)
         {
-            await _getUserAsyncRateLimit.CheckRateLimit();
+            await _getUserAsyncRateLimit.CheckRateLimit(_myLogger);
 
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             httpClient.DefaultRequestHeaders.Accept.Add(contentType);
@@ -242,45 +170,18 @@ namespace TDX_Extended
 
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("TDX_Authentication:getUserAsync Error: StatusCode= " + response.StatusCode + ", ReasonPhrase= " + response.ReasonPhrase + ".");
-                Console.WriteLine("Response content = " + stringData);
-
-                await getUserAsync(httpClient);
-            }
-            else
-            {
-                Console.WriteLine("Content: " + stringData);
-                TeamDynamix.Api.Users.User user = JsonSerializer.Deserialize<TeamDynamix.Api.Users.User>(stringData);
-                Console.WriteLine("Current User is: " + user.FullName);
-            }
-        }
-
-        public async Task getUserTestAsync(HttpClient httpClient)
-        {
-            await _getUserAsyncRateLimit.CheckRateLimit();
-
-            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            httpClient.DefaultRequestHeaders.Accept.Add(contentType);
-
-            HttpResponseMessage response = await httpClient.GetAsync(httpClient.BaseAddress + "/api/auth/getuser");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-
-            if (!response.IsSuccessStatusCode)
-            {
-                MessageBox.Show("TEST FAILED:\n\n" + 
-                    "TDX_Authentication:LoginAdminTestAsync Error: StatusCode= " + 
-                    response.StatusCode + 
-                    ", ReasonPhrase= " + 
-                    response.ReasonPhrase + "." + 
+                _myLogger.Message("TEST FAILED:\n\n" +
+                    "TDX_Authentication:LoginAdminTestAsync Error: StatusCode= " +
+                    response.StatusCode +
+                    ", ReasonPhrase= " +
+                    response.ReasonPhrase + "." +
                     "\n\nResponse content = " + response.Content);
             }
             else
             {
                 TeamDynamix.Api.Users.User user = JsonSerializer.Deserialize<TeamDynamix.Api.Users.User>(stringData);
 
-                MessageBox.Show("GETUSER TEST SUCCEEDED:\n\n" +
-                    "getUserTestAsync:\n" +
-                    "Content " + stringData +
+                _myLogger.Message("GETUSER TEST SUCCEEDED:\n\n" +
                     "Current User: " + user.FullName);
             }
         }

@@ -20,9 +20,11 @@ namespace TDX_Extended
         private TDX_APIRateLimit _bulkManageGroupsRateLimit;
         private int _bulkManageGroupsMaxCalls;
         private int _bulkManageGroupsTimePeriod; //seconds
+        private Logger _myLogger;
 
-        public TDX_People()
+        public TDX_People(Logger logger)
         {
+            _myLogger = logger;
             _getUserListMaxCalls = 1;
             _getUserListTimePeriod = 60;
             _getUserListRateLimit = new TDX_APIRateLimit(_getUserListMaxCalls, _getUserListTimePeriod);
@@ -33,12 +35,12 @@ namespace TDX_Extended
 
         public async Task<TeamDynamix.Api.Users.UserListing[]> GetUserListAsync(HttpClient httpClient, TDX_People_GetUserListQuery userListQuery)
         {
-            await _getUserListRateLimit.CheckRateLimit();
+            await _getUserListRateLimit.CheckRateLimit(_myLogger);
 
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             httpClient.DefaultRequestHeaders.Accept.Add(contentType);
 
-            var query = "api/people/userlist?" + userListQuery.getQueryString();
+            var query = httpClient.BaseAddress + "/api/people/userlist?" + userListQuery.getQueryString();
 
             Console.WriteLine("Query run at: " + DateTime.Now);
             Console.WriteLine();
@@ -63,7 +65,7 @@ namespace TDX_Extended
 
         public async Task BulkManageGroupsAsync(HttpClient httpClient, TeamDynamix.Api.Users.UserGroupsBulkManagementParameters bulkManageGroupsParams)
         {
-            await _bulkManageGroupsRateLimit.CheckRateLimit();
+            await _bulkManageGroupsRateLimit.CheckRateLimit(_myLogger);
 
             var data = JsonSerializer.Serialize(bulkManageGroupsParams);
             var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");

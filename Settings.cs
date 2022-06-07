@@ -22,11 +22,14 @@ namespace TDX_Extended
 
         private string secretsID = "48024d93-9b5e-40b8-99a1-e75d6cf33c61";
         public int selection = 0;
-        public AddressBook addressBook = new AddressBook();
+        public AddressBook addressBook;
+        private Logger _myLogger;
 
 
-        public Settings()
+        public Settings(Logger log)
         {
+            _myLogger = log;
+            addressBook = new AddressBook(_myLogger);
             populateAddressBook();
             selection = addressBook.selection;
             if (addressBook.addresses != null)
@@ -47,7 +50,6 @@ namespace TDX_Extended
             if (File.Exists(secretsPath))
             {
                 var secretsJson = File.ReadAllText(secretsPath);
-                //dynamic secrets = JsonConvert.DeserializeObject<ExpandoObject>(secretsJson, new ExpandoObjectConverter());
                 addressBook = JsonConvert.DeserializeObject<AddressBook>(secretsJson);
             }
         }

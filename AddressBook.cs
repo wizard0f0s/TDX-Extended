@@ -11,8 +11,11 @@ namespace TDX_Extended
         public List<AddressEntry> addresses { get; set; }
         public int selection { get; set; }
 
-        public AddressBook()
+        private Logger _myLogger;
+
+        public AddressBook(Logger log)
         {
+            _myLogger = log;
             addresses = new List<AddressEntry>();
             selection = 0;
         }

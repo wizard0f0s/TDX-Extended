@@ -13,6 +13,7 @@ namespace TDX_Extended
         private int _currentCallNum;
         private int MaxCalls;
         private int Period;
+        private Logger _myLogger;
 
         public TDX_APIRateLimit(int maxCalls, int seconds)
         {
@@ -22,9 +23,9 @@ namespace TDX_Extended
             Period = seconds;
         }
 
-        public Task CheckRateLimit()
+        public Task CheckRateLimit(Logger logger)
         {
-
+            _myLogger = logger;
             Console.WriteLine("Checking Rate Limit at {0}.  Count is now: {1}.  Reset time is {2}.", DateTime.Now, _currentCallNum, _resetTime);
             if (_resetTime <= DateTime.Now)
             {

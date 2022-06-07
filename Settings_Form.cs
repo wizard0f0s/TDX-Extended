@@ -16,15 +16,16 @@ namespace TDX_Extended
     internal partial class Settings_Form : Form
     {
 
-        public Settings _settings;
-        public int index = 0;
-        public int selection;
-        bool edit = false;
+        private Settings _settings;
+        private Logger _myLogger;
+        private int index = 0;
+        private int selection;
+        private bool edit = false;
 
 
-        public Settings_Form(Settings settings)
+        public Settings_Form(Logger logger, Settings settings)
         {
-
+            _myLogger = logger;
             _settings = settings;
             selection = _settings.addressBook.selection;
             index = selection;
@@ -95,8 +96,7 @@ namespace TDX_Extended
             envEntryTxtBox.ReadOnly = false;
             edit = true;
             webServEntryCheckBox.Enabled = true;
-
-            //add code to update the current list item
+            testConnectionBtn.Enabled = false;
         }
 
         private void entrySaveBtn_Click(object sender, EventArgs e)
@@ -114,8 +114,8 @@ namespace TDX_Extended
             pwdEntryTxtBox.ReadOnly = true;
             envEntryTxtBox.ReadOnly = true;
             webServEntryCheckBox.Enabled = false;
+            testConnectionBtn.Enabled = true;
 
-            //add code to validate text and save to addressbook
             if (edit)
             {
                 _settings.addressBook.addresses[index].friendlyName = friendlyNameEntryTxtBox.Text;
@@ -149,7 +149,7 @@ namespace TDX_Extended
                     isWebServices = webServEntryCheckBox.Checked
                 });
             }
-            //update the counterLbl after the entry has been saved
+
             updateIndexDisplay();
             edit = false;
         }
@@ -169,13 +169,19 @@ namespace TDX_Extended
             pwdEntryTxtBox.ReadOnly = true;
             envEntryTxtBox.ReadOnly = true;
             webServEntryCheckBox.Enabled = false;
+            testConnectionBtn.Enabled = true;
 
-            //add code to reset the text boxes
+            friendlyNameEntryTxtBox.Text = _settings.addressBook.addresses[index].friendlyName;
+            serverEntryTxtBox.Text = _settings.addressBook.addresses[index].serverAddress;
+            accountEntryTxtBox.Text = _settings.addressBook.addresses[index].account;
+            pwdEntryTxtBox.Text = _settings.addressBook.addresses[index].password;
+            envEntryTxtBox.Text = _settings.addressBook.addresses[index].environment;
+            webServEntryCheckBox.Checked = _settings.addressBook.addresses[index].isWebServices;
+
         }
 
         private void leftBtn_Click(object sender, EventArgs e)
         {
-            //add code to display the object prior to the current display
             if (index > 0)
             {
                 index--;
@@ -187,13 +193,11 @@ namespace TDX_Extended
                 webServEntryCheckBox.Checked = _settings.addressBook.addresses[index].isWebServices;
             }
 
-            //remember to reset the label "counterLbl" for the current "x of y" display
             updateIndexDisplay();
         }
 
         private void rightBtn_Click(object sender, EventArgs e)
         {
-            //add code to display the object after to the current display
             if (index < (_settings.addressBook.addresses.Count - 1))
             {
                 index++;
@@ -204,7 +208,6 @@ namespace TDX_Extended
                 envEntryTxtBox.Text = _settings.addressBook.addresses[index].environment;
                 webServEntryCheckBox.Checked = _settings.addressBook.addresses[index].isWebServices;
             }
-            //remember to reset the label "counterLbl" for the current "x of y" display
             updateIndexDisplay();
         }
 
@@ -230,7 +233,7 @@ namespace TDX_Extended
             pwdEntryTxtBox.Text = "";
             envEntryTxtBox.Text = "";
             webServEntryCheckBox.Checked = false;
-
+            testConnectionBtn.Enabled = false;
         }
 
         private void updateIndexDisplay()
@@ -276,24 +279,60 @@ namespace TDX_Extended
                 if (webServEntryCheckBox.Checked)
                 {
                     tdxAuth = new TDX_Authentication(
+                        _myLogger,
                         serverEntryTxtBox.Text,
                         accountEntryTxtBox.Text,
                         pwdEntryTxtBox.Text,
                         true);
-                    getAuthToken = tdxAuth.LoginAdminTestAsync(httpClient);
+                    getAuthToken = tdxAuth.LoginAdminAsync(httpClient);
                 }
                 else
                 {
                     tdxAuth = new TDX_Authentication(
+                        _myLogger,
                         serverEntryTxtBox.Text,
                         accountEntryTxtBox.Text,
                         pwdEntryTxtBox.Text);
-                    getAuthToken = tdxAuth.LoginTestAsync(httpClient);
+                    getAuthToken = tdxAuth.LoginAsync(httpClient);
                 }
 
                 var token = await getAuthToken;
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                tdxAuth.getUserTestAsync(httpClient).Wait();
+
+                //test the connection to confirm current user
+                await tdxAuth.getUserAsync(httpClient);
+
+                //// Pull full list of active Employees
+                //var userListQuery = new TDX_People_GetUserListQuery();
+                //userListQuery.setIsActive(true);
+                //userListQuery.setIsEmployee(true);
+                //userListQuery.setUserType(1);
+
+                //var tdxPeople = new TDX_People();
+                //TeamDynamix.Api.Users.UserListing[] tdxPeopleList = await tdxPeople.GetUserListAsync(_myLogger, httpClient, userListQuery);
+
+                //Guid[] tdx_Guids = new Guid[tdxPeopleList.Length];
+
+                //StringBuilder peopleSB = new StringBuilder();
+
+                //for (int lcv = 0; lcv < tdxPeopleList.Length; lcv++)
+                //{
+                //    peopleSB.Append(tdxPeopleList[lcv].FullName + ": " + tdxPeopleList[lcv].UID.ToString() + "\n");
+                //    tdx_Guids[lcv] = tdxPeopleList[lcv].UID;
+                //}
+
+                //_myLogger.Message();
+                //MessageBox.Show(peopleSB.ToString(), "People and UIDs");
+
+                //StringBuilder guidSB = new StringBuilder();
+
+                //foreach (var guid in tdx_Guids)
+                //{
+                //    Console.WriteLine(guid);
+                //    guidSB.Append(guid + "\n");
+                //}
+
+                //MessageBox.Show(guidSB.ToString(), "GUIDs Only");
             }
         }
 
